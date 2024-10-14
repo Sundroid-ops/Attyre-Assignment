@@ -6,4 +6,5 @@ import com.example.Attyre.Assignment.Entity.User;
 public interface UserService {
     public User saveUser(UserDTO userDTO);
 
+    public User getUserByID(Long ID);
 }
