@@ -1,6 +1,7 @@
 package com.example.Attyre.Assignment.Advice;
 
 import com.example.Attyre.Assignment.Exception.InternalServerException;
+import com.example.Attyre.Assignment.Exception.ProductNotFoundException;
 import com.example.Attyre.Assignment.Exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class RestResponseExceptionHandler {
         return ResponseEntity.badRequest().body(err);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler({UserNotFoundException.class, ProductNotFoundException.class})
     public ResponseEntity<ErrorMessage> NotFoundException(Exception exception){
         logger.info("NOT FOUND: {}", exception.getMessage());
         ErrorMessage error = new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
