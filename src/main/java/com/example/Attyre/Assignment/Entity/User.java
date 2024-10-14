@@ -1,9 +1,12 @@
 package com.example.Attyre.Assignment.Entity;
 
+import com.example.Attyre.Assignment.Entity.Enums.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -30,12 +33,10 @@ public class User{
     @Length(min = 2, max = 10, message = "username should have more than 1 character and less than 11 characters")
     private String username;
 
-    @NotEmpty(message = "display_name cannot be empty or null")
-    @Length(min = 2, max = 10, message = "display_name should have more than 1 character and less than 11 characters")
-    private String display_name;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-    private String profile_picture_url = null;
-    private String bio = null;
-    private int followers_count = 0;
-    private boolean verified = false;
+    //private List<> preference;
+
+    private LocalDateTime createdAt;
 }
