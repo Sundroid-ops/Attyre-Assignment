@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 public class UserDTO {
         @NotEmpty(message = "username cannot be empty or null")
-        @Length(min = 2, max = 15, message = "username should have more than 1 character and less than 11 characters")
+        @Length(min = 2, max = 10, message = "username should have more than 1 character and less than 11 characters")
         private String username;
 
         @Enumerated(EnumType.STRING)
