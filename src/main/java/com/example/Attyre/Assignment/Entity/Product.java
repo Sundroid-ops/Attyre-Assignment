@@ -49,6 +49,10 @@ public class Product {
 
     private Long stock;
 
+    private int rating = 0;
+
+    private int views = 0;
+
     public void setSeason(Set<Season> seasonList){
         if(season == null)
             season = new HashSet<>();
