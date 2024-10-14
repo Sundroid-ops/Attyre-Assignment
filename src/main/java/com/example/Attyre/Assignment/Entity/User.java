@@ -36,7 +36,5 @@ public class User{
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    //private List<> preference;
-
     private LocalDateTime createdAt;
 }
