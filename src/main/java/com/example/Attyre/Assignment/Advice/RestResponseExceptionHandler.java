@@ -16,13 +16,6 @@ import java.util.Map;
 public class RestResponseExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(RestResponseExceptionHandler.class);
 
-    @ExceptionHandler(InternalServerException.class)
-    public ResponseEntity<ErrorMessage> internalServiceException(InternalServerException exception){
-        logger.warn("Error occurred : {}", exception.getMessage());
-        ErrorMessage error = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
-        return ResponseEntity.internalServerError().body(error);
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> metMethodArgumentNotValidException(MethodArgumentNotValidException exception){
         Map<String, String> err = new HashMap<>();
@@ -30,5 +23,12 @@ public class RestResponseExceptionHandler {
             err.put(error.getField(), error.getDefaultMessage()));
         logger.info("Invalid Incoming Requests : {}", exception);
         return ResponseEntity.badRequest().body(err);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessage> internalServiceException(InternalServerException exception){
+        logger.warn("Error occurred : {}", exception.getMessage());
+        ErrorMessage error = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        return ResponseEntity.internalServerError().body(error);
     }
 }
