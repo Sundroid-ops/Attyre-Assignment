@@ -1,6 +1,7 @@
 package com.example.Attyre.Assignment.Advice;
 
 import com.example.Attyre.Assignment.Exception.InternalServerException;
+import com.example.Attyre.Assignment.Exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,18 @@ public class RestResponseExceptionHandler {
         Map<String, String> err = new HashMap<>();
         exception.getBindingResult().getFieldErrors().forEach(error ->
             err.put(error.getField(), error.getDefaultMessage()));
-        logger.info("Invalid Incoming Requests : {}", exception);
+        logger.info("Invalid Incoming Requests : {}", exception.getMessage());
         return ResponseEntity.badRequest().body(err);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorMessage> NotFoundException(Exception exception){
+        logger.info("NOT FOUND: {}", exception.getMessage());
+        ErrorMessage error = new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorMessage> internalServiceException(InternalServerException exception){
         logger.warn("Error occurred : {}", exception.getMessage());
         ErrorMessage error = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
