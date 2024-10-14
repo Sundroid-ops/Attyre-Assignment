@@ -23,9 +23,10 @@ public class User{
         strategy = GenerationType.SEQUENCE,
         generator = "user_sequence"
     )
-    private int id;
+    private Long id;
 
     @NotEmpty(message = "username cannot be empty or null")
+    @Column(unique = true)
     @Length(min = 2, max = 10, message = "username should have more than 1 character and less than 11 characters")
     private String username;
 
