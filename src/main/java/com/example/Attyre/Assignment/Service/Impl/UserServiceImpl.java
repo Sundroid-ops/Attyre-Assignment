@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -23,8 +25,8 @@ public class UserServiceImpl implements UserService {
             logger.info("Creating user");
             User user = User.builder()
                     .username(userDTO.getUsername())
-                    .display_name(userDTO.getDisplay_name())
-                    .bio(userDTO.getBio())
+                    .gender(userDTO.getGender())
+                    .createdAt(LocalDateTime.now())
                     .build();
 
             User newUser = userRepo.save(user);
@@ -35,6 +37,4 @@ public class UserServiceImpl implements UserService {
             throw new InternalServerException(exception);
         }
     }
-
-
 }
