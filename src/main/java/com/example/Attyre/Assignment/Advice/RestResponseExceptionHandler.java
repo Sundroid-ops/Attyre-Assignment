@@ -1,9 +1,6 @@
 package com.example.Attyre.Assignment.Advice;
 
-import com.example.Attyre.Assignment.Exception.InternalServerException;
-import com.example.Attyre.Assignment.Exception.ProductNotFoundException;
-import com.example.Attyre.Assignment.Exception.UserNotFoundException;
-import com.example.Attyre.Assignment.Exception.UserPreferenceNotRegisteredException;
+import com.example.Attyre.Assignment.Exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,7 +25,7 @@ public class RestResponseExceptionHandler {
         return ResponseEntity.badRequest().body(err);
     }
 
-    @ExceptionHandler({UserNotFoundException.class, ProductNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, ProductNotFoundException.class, UserPreferenceNotFoundException.class})
     public ResponseEntity<ErrorMessage> NotFoundException(Exception exception){
         logger.info("NOT FOUND: {}", exception.getMessage());
         ErrorMessage error = new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
