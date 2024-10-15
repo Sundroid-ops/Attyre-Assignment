@@ -1,6 +1,7 @@
 package com.example.Attyre.Assignment.Controller;
 
 import com.example.Attyre.Assignment.DTO.PreferenceDTO;
+import com.example.Attyre.Assignment.Entity.Preference;
 import com.example.Attyre.Assignment.Service.Impl.PreferenceServiceImpl;
 import com.example.Attyre.Assignment.Service.PreferenceService;
 import jakarta.validation.Valid;
@@ -23,5 +24,13 @@ public class PreferenceController {
         preferenceService.savePreferenceByUserID(preferenceDTO, userID);
         logger.info("Successfully registered the preference of userID: {}", userID);
         return ResponseEntity.ok().body("Preference Registered");
+    }
+
+    @GetMapping("/{userID}")
+    public ResponseEntity<Preference> getPreferenceByUserID(@PathVariable Long userID){
+        logger.info("GET request for finding preference by userID: {}", userID);
+        Preference preference = preferenceService.getPreferenceByUserID(userID);
+        logger.info("Found user preference for userID : {}", userID);
+        return ResponseEntity.ok().body(preference);
     }
 }
