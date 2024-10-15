@@ -9,6 +9,6 @@ import java.util.List;
 public interface PreferenceService {
     public void savePreferenceByUserID(PreferenceDTO preferenceDTO, Long userID);
 
-    public Preference getPreferenceByUserID(Long userID);
+    public Preference getPreferenceDataByUserID(Long userID);
 
 }

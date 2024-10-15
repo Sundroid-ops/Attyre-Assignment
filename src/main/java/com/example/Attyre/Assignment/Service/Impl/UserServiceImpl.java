@@ -54,4 +54,5 @@ public class UserServiceImpl implements UserService {
         logger.info("User Found for ID: {}", user.getId());
         return user;
     }
+
 }

@@ -19,10 +19,4 @@ public class UserDTO {
 
         @Enumerated(EnumType.STRING)
         private Gender gender;
-
-//        private List<> styles;
-//        private List<> brands;
-//        private List<> clothes;
-//        private int minPrice;
-//        private int maxPrice;
 }

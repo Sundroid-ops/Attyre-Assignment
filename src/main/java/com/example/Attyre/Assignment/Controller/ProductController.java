@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
@@ -33,5 +35,10 @@ public class ProductController {
         Product product = productService.getProductByID(ID);
         logger.info("Sending user response after finding product by id: {}", ID);
         return ResponseEntity.ok().body(product);
+    }
+
+    @GetMapping("/recommendations/{userID}")
+    public ResponseEntity<List<Product>> getProductsFromUserPreference(@PathVariable Long userID){
+        return ResponseEntity.ok().body(productService.getProductsFromUserPreference(userID));
     }
 }

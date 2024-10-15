@@ -29,7 +29,7 @@ public class PreferenceController {
     @GetMapping("/{userID}")
     public ResponseEntity<Preference> getPreferenceByUserID(@PathVariable Long userID){
         logger.info("GET request for finding preference by userID: {}", userID);
-        Preference preference = preferenceService.getPreferenceByUserID(userID);
+        Preference preference = preferenceService.getPreferenceDataByUserID(userID);
         logger.info("Found user preference for userID : {}", userID);
         return ResponseEntity.ok().body(preference);
     }

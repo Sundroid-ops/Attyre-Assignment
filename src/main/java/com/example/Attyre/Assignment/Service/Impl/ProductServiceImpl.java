@@ -1,15 +1,19 @@
 package com.example.Attyre.Assignment.Service.Impl;
 
 import com.example.Attyre.Assignment.DTO.ProductDTO;
+import com.example.Attyre.Assignment.Entity.Preference;
 import com.example.Attyre.Assignment.Entity.Product;
 import com.example.Attyre.Assignment.Exception.ProductNotFoundException;
 import com.example.Attyre.Assignment.Repository.ProductRepo;
+import com.example.Attyre.Assignment.Service.PreferenceService;
 import com.example.Attyre.Assignment.Service.ProductService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,6 +21,9 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private PreferenceService preferenceService;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
@@ -51,4 +58,18 @@ public class ProductServiceImpl implements ProductService {
         logger.info("Product Found for ID: {}", product.getId());
         return product;
     }
+
+    @Override
+    public List<Product> getProductsFromUserPreference(Long userID) {
+        List<Product> products = new LinkedList<>();
+
+        Preference userPreference = preferenceService.getPreferenceDataByUserID(userID);
+        if(userPreference != null) {
+            products.addAll(productRepo
+                    .getProductsByUserPreference(userPreference.getCategory(), userPreference.getBrands(),
+                            userPreference.getSeasons(), userPreference.getStyles()));
+        }
+        return products;
+    }
+
 }
