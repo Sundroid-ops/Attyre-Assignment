@@ -3,6 +3,7 @@ package com.example.Attyre.Assignment.Advice;
 import com.example.Attyre.Assignment.Exception.InternalServerException;
 import com.example.Attyre.Assignment.Exception.ProductNotFoundException;
 import com.example.Attyre.Assignment.Exception.UserNotFoundException;
+import com.example.Attyre.Assignment.Exception.UserPreferenceNotRegisteredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,12 @@ public class RestResponseExceptionHandler {
         logger.info("NOT FOUND: {}", exception.getMessage());
         ErrorMessage error = new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserPreferenceNotRegisteredException.class)
+    public ResponseEntity<String> UserPreferenceNotRegistered(UserPreferenceNotRegisteredException exception){
+        logger.info("Preference not setup by User ID: {}", exception.getMessage());
+        return ResponseEntity.ok().body("Preference Not Setup");
     }
 
     @ExceptionHandler(RuntimeException.class)
