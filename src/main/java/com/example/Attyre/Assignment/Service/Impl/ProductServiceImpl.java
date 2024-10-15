@@ -9,6 +9,7 @@ import com.example.Attyre.Assignment.Service.PreferenceService;
 import com.example.Attyre.Assignment.Service.ProductService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,14 +61,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductsFromUserPreference(Long userID) {
+    public List<Product> getProductsFromUserPreference(Long userID, int page, int size) {
         List<Product> products = new LinkedList<>();
 
         Preference userPreference = preferenceService.getPreferenceDataByUserID(userID);
         if(userPreference != null) {
             products.addAll(productRepo
                     .getProductsByUserPreference(userPreference.getCategory(), userPreference.getBrands(),
-                            userPreference.getSeasons(), userPreference.getStyles()));
+                            userPreference.getSeasons(), userPreference.getStyles(), PageRequest.of(page,size)));
         }
         return products;
     }

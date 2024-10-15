@@ -37,12 +37,20 @@ public class PreferenceServiceImpl implements PreferenceService {
         User user = userService.getUserByID(userID);
 
         Preference userPreference = Preference.builder()
-                .brands(preferenceDTO.getBrands())
-                .category(preferenceDTO.getCategory())
-                .styles(preferenceDTO.getStyles())
-                .seasons(preferenceDTO.getSeasons())
                 .user(user)
                 .build();
+
+        if(preferenceDTO.getStyles() != null)
+            userPreference.setStyles(preferenceDTO.getStyles());
+
+        if(preferenceDTO.getBrands() != null)
+            userPreference.setBrands(preferenceDTO.getBrands());
+
+        if(preferenceDTO.getCategory() != null)
+            userPreference.setCategory(preferenceDTO.getCategory());
+
+        if(preferenceDTO.getSeasons() != null)
+            userPreference.setSeasons(preferenceDTO.getSeasons());
 
         preferenceRepo.save(userPreference);
         logger.info("Preference of UserID : {} stored successfully", userID);

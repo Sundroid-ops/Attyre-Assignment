@@ -10,6 +10,6 @@ public interface ProductService {
 
     public Product getProductByID(Long ID);
 
-    public List<Product> getProductsFromUserPreference(Long userID);
+    public List<Product> getProductsFromUserPreference(Long userID, int page, int size);
 
 }

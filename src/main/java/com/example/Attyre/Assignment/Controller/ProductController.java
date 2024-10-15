@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,10 @@ public class ProductController {
     }
 
     @GetMapping("/recommendations/{userID}")
-    public ResponseEntity<List<Product>> getProductsFromUserPreference(@PathVariable Long userID){
-        return ResponseEntity.ok().body(productService.getProductsFromUserPreference(userID));
+    public ResponseEntity<List<Product>> getProductsFromUserPreference(
+                @PathVariable Long userID,
+                @RequestParam int page,
+                @RequestParam int size){
+        return ResponseEntity.ok().body(productService.getProductsFromUserPreference(userID, page, size));
     }
 }
