@@ -10,6 +10,7 @@ import com.example.Attyre.Assignment.Service.ProductService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,4 +74,8 @@ public class ProductServiceImpl implements ProductService {
         return products;
     }
 
+    @Override
+    public List<Product> getPopularProducts(int page, int size) {
+        return productRepo.getPopularProducts(PageRequest.of(page, size, Sort.by("rating").descending()));
+    }
 }

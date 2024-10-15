@@ -18,4 +18,7 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
             "AND (p.season IS EMPTY OR EXISTS (SELECT s FROM p.season s WHERE s IN ?3)) " +
             "OR (p.style IS NULL OR p.style IN ?4)")
     List<Product> getProductsByUserPreference(Set<String> categories, Set<String> brands, Set<Season> seasons, Set<String> styles, Pageable pageable);
+
+    @Query("SELECT p FROM Product p")
+    List<Product> getPopularProducts(Pageable pageable);
 }

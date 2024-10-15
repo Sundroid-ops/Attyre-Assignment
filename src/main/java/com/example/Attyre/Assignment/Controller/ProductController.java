@@ -45,4 +45,9 @@ public class ProductController {
                 @RequestParam int size){
         return ResponseEntity.ok().body(productService.getProductsFromUserPreference(userID, page, size));
     }
+
+    @GetMapping("/popular")
+    public ResponseEntity<List<Product>> getPopularProducts(@RequestParam int page, @RequestParam int size){
+        return ResponseEntity.ok().body(productService.getPopularProducts(page, size));
+    }
 }

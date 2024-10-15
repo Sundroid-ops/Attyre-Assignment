@@ -12,4 +12,6 @@ public interface ProductService {
 
     public List<Product> getProductsFromUserPreference(Long userID, int page, int size);
 
+    public List<Product> getPopularProducts(int page, int size);
+
 }
