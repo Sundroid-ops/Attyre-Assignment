@@ -1,5 +1,6 @@
 package com.example.Attyre.Assignment.Service.Impl;
 
+import com.example.Attyre.Assignment.Cache.Service.ProductInteractionService;
 import com.example.Attyre.Assignment.Entity.Enums.Action;
 import com.example.Attyre.Assignment.Entity.Product;
 import com.example.Attyre.Assignment.Entity.User;
@@ -21,12 +22,13 @@ public class UserInteractionImpl implements UserInteractionService {
 
     @Autowired
     private UserInteractionRepo userInteractionRepo;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductInteractionService productInteractionService;
+
     @Override
     public void saveInteraction(Long userID, Long productID, Action action) {
         Optional<UserInteraction> getUserInteraction = userInteractionRepo.findByProductAndUserID(userID, productID);
@@ -60,9 +62,23 @@ public class UserInteractionImpl implements UserInteractionService {
         } else if (action == Action.VIEWED) {
             product.setViews(product.getViews() + 1);
             logger.info("product ID : {} Viewed By Used ID: {}", productID, userID);
+
         }
 
         userInteraction.setActions(action);
+
+        cacheProductInteraction(product);
+        logger.info("cached product ");
         userInteractionRepo.save(userInteraction);
+    }
+
+    private void cacheProductInteraction(Product product){
+        // TTL is short as stock is low to prevent stale product data
+        if(product.getStock() < 20) {
+            productInteractionService.saveRecentProduct(product, 10);
+            return;
+
+        }
+        productInteractionService.saveRecentProduct(product, 30);
     }
 }
