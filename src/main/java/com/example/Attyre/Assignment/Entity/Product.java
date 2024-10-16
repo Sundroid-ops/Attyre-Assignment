@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 @Setter
 @Builder
 @Table(name = "_products")
-public class Product {
+public class Product implements Serializable {
     @Id
     @SequenceGenerator(
             name = "product_sequence",
