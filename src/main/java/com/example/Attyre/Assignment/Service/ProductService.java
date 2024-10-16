@@ -8,7 +8,7 @@ import java.util.List;
 public interface ProductService {
     public Product saveProduct(ProductDTO productDTO);
 
-    public Product getProductByID(Long ID);
+    public Product getProductByID(Long productID);
 
     public List<Product> getProductsFromUserPreference(Long userID, int page, int size);
 

@@ -30,11 +30,11 @@ public class ProductController {
         return ResponseEntity.ok().body(product);
     }
 
-    @GetMapping("/{ID}")
-    public ResponseEntity<Product> getUserByID(@PathVariable Long ID){
-        logger.info("GET request for finding product by ID: {}", ID);
-        Product product = productService.getProductByID(ID);
-        logger.info("Sending user response after finding product by id: {}", ID);
+    @GetMapping("/{productID}")
+    public ResponseEntity<Product> getUserByID(@PathVariable Long productID){
+        logger.info("GET request for finding product by ID: {}", productID);
+        Product product = productService.getProductByID(productID);
+        logger.info("Sending user response after finding product by id: {}", productID);
         return ResponseEntity.ok().body(product);
     }
 

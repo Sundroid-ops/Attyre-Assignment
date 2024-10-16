@@ -1,12 +1,15 @@
 package com.example.Attyre.Assignment.Service.Impl;
 
+import com.example.Attyre.Assignment.Cache.Service.ProductInteractionService;
 import com.example.Attyre.Assignment.DTO.ProductDTO;
+import com.example.Attyre.Assignment.Entity.Enums.Action;
 import com.example.Attyre.Assignment.Entity.Preference;
 import com.example.Attyre.Assignment.Entity.Product;
 import com.example.Attyre.Assignment.Exception.ProductNotFoundException;
 import com.example.Attyre.Assignment.Repository.ProductRepo;
 import com.example.Attyre.Assignment.Service.PreferenceService;
 import com.example.Attyre.Assignment.Service.ProductService;
+import com.example.Attyre.Assignment.Service.UserInteractionService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private PreferenceService preferenceService;
+
+    @Autowired
+    private ProductInteractionService productInteractionService;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
@@ -49,14 +55,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductByID(Long ID) {
-        logger.info("Searching product by id: {}", ID);
-        Optional<Product> productOptional = productRepo.findById(ID);
+    public Product getProductByID(Long productID) {
+        Product product = productInteractionService.getProductByID(productID);
+        if(product != null)
+            return product;
+
+        logger.info("Searching product in DB by id: {}", productID);
+        Optional<Product> productOptional = productRepo.findById(productID);
 
         if(productOptional.isEmpty())
-            throw new ProductNotFoundException("Product Not Found for ID: "+ ID);
+            throw new ProductNotFoundException("Product Not Found for ID: "+ productID);
 
-        Product product = productOptional.get();
+        product = productOptional.get();
         logger.info("Product Found for ID: {}", product.getId());
         return product;
     }

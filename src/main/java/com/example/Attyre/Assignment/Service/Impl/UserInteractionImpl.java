@@ -68,7 +68,6 @@ public class UserInteractionImpl implements UserInteractionService {
         userInteraction.setActions(action);
 
         cacheProductInteraction(product);
-        logger.info("cached product ");
         userInteractionRepo.save(userInteraction);
     }
 
