@@ -4,4 +4,6 @@ import com.example.Attyre.Assignment.Entity.Product;
 
 public interface ProductInteractionService {
     public void saveRecentProduct(Product product, int TTL);
+
+    public Product getProductByID(Long productID);
 }
