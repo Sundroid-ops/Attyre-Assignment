@@ -67,17 +67,7 @@ public class UserInteractionImpl implements UserInteractionService {
 
         userInteraction.setActions(action);
 
-        cacheProductInteraction(product);
+        productInteractionService.cacheProductInteraction(product);
         userInteractionRepo.save(userInteraction);
-    }
-
-    private void cacheProductInteraction(Product product){
-        // TTL is short as stock is low to prevent stale product data
-        if(product.getStock() < 20) {
-            productInteractionService.saveRecentProduct(product, 10);
-            return;
-
-        }
-        productInteractionService.saveRecentProduct(product, 30);
     }
 }

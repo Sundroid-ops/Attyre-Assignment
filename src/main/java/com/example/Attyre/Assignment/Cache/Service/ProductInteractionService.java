@@ -6,4 +6,6 @@ public interface ProductInteractionService {
     public void saveRecentProduct(Product product, int TTL);
 
     public Product getProductByID(Long productID);
+
+    public void cacheProductInteraction(Product product);
 }

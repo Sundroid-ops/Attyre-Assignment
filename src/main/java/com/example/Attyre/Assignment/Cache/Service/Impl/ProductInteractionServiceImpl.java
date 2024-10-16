@@ -40,4 +40,15 @@ public class ProductInteractionServiceImpl implements ProductInteractionService 
         logger.info("Cache MISS for productID: {}", productID);
         return null;
     }
+
+    @Override
+    public void cacheProductInteraction(Product product){
+        // TTL is short as stock is low to prevent stale product data
+        if(product.getStock() < 20) {
+            saveRecentProduct(product, 10);
+            return;
+
+        }
+        saveRecentProduct(product, 30);
+    }
 }
