@@ -15,7 +15,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory();
     }
 
-
+    @Bean
     public RedisTemplate<String, Object> redisTemplate(){
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
