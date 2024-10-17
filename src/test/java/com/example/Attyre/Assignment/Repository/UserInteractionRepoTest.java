@@ -1,8 +1,12 @@
 package com.example.Attyre.Assignment.Repository;
 
+import com.example.Attyre.Assignment.Entity.Enums.Action;
+import com.example.Attyre.Assignment.Entity.Enums.Gender;
 import com.example.Attyre.Assignment.Entity.Enums.GenderClothing;
 import com.example.Attyre.Assignment.Entity.Enums.Season;
 import com.example.Attyre.Assignment.Entity.Product;
+import com.example.Attyre.Assignment.Entity.User;
+import com.example.Attyre.Assignment.Entity.UserInteraction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,9 +22,10 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class ProductRepoTest {
+class UserInteractionRepoTest {
     @Autowired
-    private ProductRepo productRepo;
+    private UserInteractionRepo userInteractionRepo;
+
     @Autowired
     private TestEntityManager entityManager;
 
@@ -60,43 +66,40 @@ class ProductRepoTest {
 
         entityManager.persist(product2);
 
-        Product product3 = Product.builder()
-                .name("Polo shirt")
-                .style("casual")
-                .stock(15L)
-                .brand("Polo")
-                .genderClothing(GenderClothing.MALE)
-                .category("shirt")
-                .rating(7)
-                .views(15)
-                .season(seasons2)
+        User user = User.builder()
+                .username("abc_xyz")
+                .gender(Gender.FEMALE)
+                .createdAt(LocalDateTime.now())
                 .build();
 
-        entityManager.persist(product3);
+        Set<Action> action1 = new HashSet<>();
+        action1.add(Action.LIKED);
+
+        UserInteraction userInteraction1 = UserInteraction.builder()
+                .product(product1)
+                .user(user)
+                .actions(action1)
+                .build();
+
+        Set<Action> action2 = new HashSet<>();
+        action2.add(Action.LIKED);
+        action2.add(Action.VIEWED);
+
+        UserInteraction userInteraction2 = UserInteraction.builder()
+                .product(product2)
+                .user(user)
+                .actions(action2)
+                .build();
+
+        entityManager.persist(userInteraction1);
+        entityManager.persist(userInteraction2);
     }
 
     @Test
-    void getProductsByUserPreference() {
-        Set<String> categories = new HashSet<>();
-        Set<String> brands = new HashSet<>();
-        Set<String> styles = new HashSet<>();
-        Set<Season> seasons = new HashSet<>();
+    void getInteractedProductsByUserID() {
+        List<Product> products = userInteractionRepo.getInteractedProductsByUserID(1L, PageRequest.of(0, 2));
 
-        categories.add("shirt");
-        styles.add("casual");
-        seasons.add(Season.SUMMER);
-
-        List<Product> productList = productRepo.getProductsByUserPreference(categories, brands, seasons, styles, PageRequest.of(0, 2));
-
-        assertEquals(productList.size(), 2);
-        assertTrue(productList.get(0).getSeason().contains(Season.SUMMER));
-        assertEquals(productList.get(1).getStyle(), "casual");
-    }
-
-    @Test
-    void getPopularProducts() {
-        List<Product> products = productRepo.getPopularProducts(PageRequest.of(0, 3));
-        assertEquals(products.size(), 3);
-        assertTrue(products.get(0).getRating() > products.get(1).getRating());
+        assertEquals(products.size(), 2);
+        assertEquals(products.get(0).getSeason().contains(Action.VIEWED), products.get(1).getSeason().contains(Action.VIEWED));
     }
 }
