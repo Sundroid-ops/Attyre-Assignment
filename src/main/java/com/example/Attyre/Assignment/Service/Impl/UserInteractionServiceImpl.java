@@ -12,9 +12,13 @@ import com.example.Attyre.Assignment.Service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,7 +68,7 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         } else if (action == Action.VIEWED) {
             product.setViews(product.getViews() + 1);
             logger.info("product ID : {} Viewed By Used ID: {}", productID, userID);
-
+            userInteraction.setCreatedAt(LocalDateTime.now());
         }
 
         userInteraction.setActions(action);
@@ -75,5 +79,10 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         userInteractionRepo.save(userInteraction);
     }
 
-
+    @Override
+    @Transactional
+    public List<Product> getInteraction(Long userID, int page, int size) {
+        List<Product> products = userInteractionRepo.getInteractedProductsByUserID(userID, PageRequest.of(page, size, Sort.by("createdAt").descending()));
+        return products;
+    }
 }

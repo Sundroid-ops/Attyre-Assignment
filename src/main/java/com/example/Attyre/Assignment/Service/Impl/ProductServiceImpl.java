@@ -34,8 +34,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private PopularProductsService popularProductsService;
 
-    private int index = 0;
-
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Override

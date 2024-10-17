@@ -5,6 +5,7 @@ import com.example.Attyre.Assignment.Entity.Enums.Action;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,6 +53,8 @@ public class UserInteraction {
 
     @ElementCollection
     private Set<Action> actions;
+
+    private LocalDateTime createdAt;
 
     public void setActions(Action action){
         if(actions == null)

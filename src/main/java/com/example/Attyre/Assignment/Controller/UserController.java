@@ -2,6 +2,7 @@ package com.example.Attyre.Assignment.Controller;
 
 import com.example.Attyre.Assignment.DTO.UserDTO;
 import com.example.Attyre.Assignment.Entity.Enums.Action;
+import com.example.Attyre.Assignment.Entity.Product;
 import com.example.Attyre.Assignment.Entity.User;
 import com.example.Attyre.Assignment.Service.UserInteractionService;
 import com.example.Attyre.Assignment.Service.UserService;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -51,5 +54,15 @@ public class UserController {
     public void saveViewedInteraction(@PathVariable Long userID, @PathVariable Long productID){
         logger.info("POST request to View for ProductID: {} by UserID: {}", productID, userID);
         userInteractionService.saveInteraction(userID, productID, Action.VIEWED);
+    }
+
+    @GetMapping("/{userID}/interactions")
+    public ResponseEntity<List<Product>> getUserInteractedProducts(
+            @PathVariable Long userID,
+            @RequestParam int page,
+            @RequestParam int size){
+        logger.info("GET request to View interacted Products for UserID: {}", userID);
+        List<Product> products = userInteractionService.getInteraction(userID, page, size);
+        return ResponseEntity.ok().body(products);
     }
 }
