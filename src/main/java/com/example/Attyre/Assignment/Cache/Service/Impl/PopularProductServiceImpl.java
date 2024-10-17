@@ -45,7 +45,6 @@ public class PopularProductServiceImpl implements PopularProductsService {
 
         logger.info("Cache hit for popular productIDs");
         for (Long productID: productIDs) {
-            //System.out.println(productIDs.size());
             Product product = (Product) redisTemplateObject.opsForHash().get(KEY, productID);
 
             if (product != null) {

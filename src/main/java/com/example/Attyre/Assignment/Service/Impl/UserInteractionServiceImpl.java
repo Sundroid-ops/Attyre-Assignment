@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,7 +75,7 @@ public class UserInteractionServiceImpl implements UserInteractionService {
         userInteraction.setActions(action);
 
         if(productInteractionService.getProductByID(productID) == null)
-            productInteractionService.cacheProductInteraction(product);
+            productInteractionService.cacheProductInteraction(userID, product);
 
         userInteractionRepo.save(userInteraction);
     }
@@ -82,7 +83,36 @@ public class UserInteractionServiceImpl implements UserInteractionService {
     @Override
     @Transactional
     public List<Product> getInteraction(Long userID, int page, int size) {
-        List<Product> products = userInteractionRepo.getInteractedProductsByUserID(userID, PageRequest.of(page, size, Sort.by("createdAt").descending()));
-        return products;
+        List<Product> products = productInteractionService.getInteractedProductsByUserID(userID);
+
+        if(products == null || products.isEmpty() || products.size() < size){
+            logger.info("DB search for user interacted products");
+            int itemSize = size;
+            int itemPage = page;
+            if(products != null && !products.isEmpty()) {
+                itemPage++;
+                itemSize = size - products.size();
+            }
+
+            List<Product> dbProducts = userInteractionRepo.getInteractedProductsByUserID(userID, PageRequest.of(itemPage, itemSize, Sort.by("createdAt").descending()));
+
+            if ((dbProducts == null || dbProducts.isEmpty()) && (products == null || products.isEmpty()))
+                return products;
+
+            products.addAll(dbProducts);
+            for(Product product: dbProducts)
+                productInteractionService.saveRecentProduct(userID, product, 15);
+        }
+
+        int start = page * size;
+        int end = start + size - 1;
+        List<Product> recentProducts = new LinkedList<>();
+
+        for(int i=start; i<=end; i++){
+            if(products.size() <= i) break;
+            recentProducts.add(products.get(i));
+        }
+
+        return recentProducts;
     }
 }
