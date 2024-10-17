@@ -14,4 +14,6 @@ public interface ProductService {
 
     public List<Product> getPopularProducts(int page, int size);
 
+    public List<Product> getRecommendationsByUser(Long userID, int page, int size);
+
 }

@@ -42,7 +42,7 @@ public class Product implements Serializable {
     @NotEmpty(message = "brand cannot be empty nor null")
     private String brand;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Season> season;
 
     @NotEmpty(message = "style cannot be empty nor null")

@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User getUserByID(Long ID) {
         logger.info("Searching user by id: {}", ID);
         Optional<User> userOptional = userRepo.findById(ID);

@@ -26,7 +26,7 @@ public class ProductInteractionServiceImpl implements ProductInteractionService 
     public void saveRecentProduct(Product product, int TTL) {
         redisTemplate.opsForHash().put(KEY, product.getId(), product);
         redisTemplate.expire(KEY, TTL, TimeUnit.MINUTES);
-        logger.info("ProductID: {} saved with TTL", product, TTL);
+        logger.info("ProductID: {} saved with TTL {}", product.getId(), TTL);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.Attyre.Assignment.Service.Impl;
 
+import com.example.Attyre.Assignment.Cache.Service.PopularProductsService;
 import com.example.Attyre.Assignment.Cache.Service.ProductInteractionService;
 import com.example.Attyre.Assignment.DTO.ProductDTO;
 import com.example.Attyre.Assignment.Entity.Enums.Action;
@@ -31,7 +32,9 @@ public class ProductServiceImpl implements ProductService {
     private PreferenceService preferenceService;
 
     @Autowired
-    private ProductInteractionService productInteractionService;
+    private PopularProductsService popularProductsService;
+
+    private int index = 0;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
@@ -55,11 +58,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Product getProductByID(Long productID) {
-        Product product = productInteractionService.getProductByID(productID);
-        if(product != null)
-            return product;
-
+        Product product = null;
         logger.info("Searching product in DB by id: {}", productID);
         Optional<Product> productOptional = productRepo.findById(productID);
 
@@ -72,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public List<Product> getProductsFromUserPreference(Long userID, int page, int size) {
         List<Product> products = new LinkedList<>();
 
@@ -85,7 +87,54 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public List<Product> getPopularProducts(int page, int size) {
-        return productRepo.getPopularProducts(PageRequest.of(page, size, Sort.by("rating").descending()));
+        List<Product> products = popularProductsService.getPopularProducts(0, 5);
+
+        if(products == null || products.isEmpty() || products.size() < size){
+            logger.info("DB search for popular products");
+            int itemSize = size;
+            int itemPage = page;
+            if(products != null && !products.isEmpty()) {
+                itemPage++;
+                itemSize = size - products.size();
+            }
+
+            List<Product> dbProducts = productRepo.getPopularProducts(PageRequest.of(itemPage, itemSize, Sort.by("rating").descending()));
+
+            if ((dbProducts == null || dbProducts.isEmpty()) && (products == null || products.isEmpty()))
+                return products;
+
+            products.addAll(dbProducts);
+            popularProductsService.savePopularProducts(products);
+        }
+
+        int start = page * size;
+        int end = start + size - 1;
+        List<Product> popularProducts = new LinkedList<>();
+
+        for(int i=start; i<=end; i++){
+            if(products.size() <= i) break;
+            popularProducts.add(products.get(i));
+        }
+
+        return popularProducts;
+    }
+
+    @Override
+    @Transactional
+    public List<Product> getRecommendationsByUser(Long userID, int page, int size) {
+        List<Product> products = new LinkedList<>();
+
+        List<Product> popularProducts = getPopularProducts(page, 2);
+        size -= popularProducts.size();
+        if(popularProducts != null && !popularProducts.isEmpty())
+            products.addAll(popularProducts);
+
+        List<Product> userPreferProducts = getProductsFromUserPreference(userID, page, size);
+        if(userPreferProducts != null && !userPreferProducts.isEmpty())
+            products.addAll(userPreferProducts);
+
+        return products;
     }
 }

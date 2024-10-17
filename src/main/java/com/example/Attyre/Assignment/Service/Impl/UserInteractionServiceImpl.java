@@ -13,11 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-public class UserInteractionImpl implements UserInteractionService {
+public class UserInteractionServiceImpl implements UserInteractionService {
     private static final Logger logger = LoggerFactory.getLogger(UserInteractionService.class);
 
     @Autowired
@@ -30,6 +31,7 @@ public class UserInteractionImpl implements UserInteractionService {
     private ProductInteractionService productInteractionService;
 
     @Override
+    @Transactional
     public void saveInteraction(Long userID, Long productID, Action action) {
         Optional<UserInteraction> getUserInteraction = userInteractionRepo.findByProductAndUserID(userID, productID);
         Product product = null;
@@ -67,7 +69,11 @@ public class UserInteractionImpl implements UserInteractionService {
 
         userInteraction.setActions(action);
 
-        productInteractionService.cacheProductInteraction(product);
+        if(productInteractionService.getProductByID(productID) == null)
+            productInteractionService.cacheProductInteraction(product);
+
         userInteractionRepo.save(userInteraction);
     }
+
+
 }

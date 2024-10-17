@@ -57,6 +57,7 @@ public class PreferenceServiceImpl implements PreferenceService {
     }
 
     @Override
+    @Transactional
     public Preference getPreferenceDataByUserID(Long userID) {
         logger.info("sending recommendations based on user preference");
         Optional<Preference> userPreference = preferenceRepo.findByUser(userID);
