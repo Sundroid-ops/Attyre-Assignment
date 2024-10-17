@@ -82,7 +82,8 @@ public class UserInteractionServiceImpl implements UserInteractionService {
 
     @Override
     @Transactional
-    public List<Product> getInteraction(Long userID, int page, int size) {
+    public List<Product> getProductInteractions(Long userID, int page, int size) {
+        if (size == 0) return new LinkedList<>();
         List<Product> products = productInteractionService.getInteractedProductsByUserID(userID);
 
         if(products == null || products.isEmpty() || products.size() < size){

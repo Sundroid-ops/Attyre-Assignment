@@ -4,6 +4,7 @@ import com.example.Attyre.Assignment.DTO.UserDTO;
 import com.example.Attyre.Assignment.Entity.Enums.Action;
 import com.example.Attyre.Assignment.Entity.Product;
 import com.example.Attyre.Assignment.Entity.User;
+import com.example.Attyre.Assignment.Service.ProductRecommendationService;
 import com.example.Attyre.Assignment.Service.UserInteractionService;
 import com.example.Attyre.Assignment.Service.UserService;
 import jakarta.validation.Valid;
@@ -25,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserInteractionService userInteractionService;
+
+    @Autowired
+    private ProductRecommendationService productRecommendationService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -56,13 +60,13 @@ public class UserController {
         userInteractionService.saveInteraction(userID, productID, Action.VIEWED);
     }
 
-    @GetMapping("/{userID}/interactions")
+    @GetMapping("/{userID}/recommendation")
     public ResponseEntity<List<Product>> getUserInteractedProducts(
             @PathVariable Long userID,
             @RequestParam int page,
             @RequestParam int size){
         logger.info("GET request to View interacted Products for UserID: {}", userID);
-        List<Product> products = userInteractionService.getInteraction(userID, page, size);
+        List<Product> products = productRecommendationService.getRecommendationsByUser(userID, page, size);
         return ResponseEntity.ok().body(products);
     }
 }

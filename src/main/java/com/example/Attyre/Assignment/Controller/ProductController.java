@@ -38,14 +38,6 @@ public class ProductController {
         return ResponseEntity.ok().body(product);
     }
 
-    @GetMapping("/recommendations/{userID}")
-    public ResponseEntity<List<Product>> getProductsFromUserPreference(
-                @PathVariable Long userID,
-                @RequestParam int page,
-                @RequestParam int size){
-        return ResponseEntity.ok().body(productService.getRecommendationsByUser(userID, page, size));
-    }
-
     @GetMapping("/popular")
     public ResponseEntity<List<Product>> getPopularProducts(@RequestParam int page, @RequestParam int size){
         logger.info("GET request for getting popular products");

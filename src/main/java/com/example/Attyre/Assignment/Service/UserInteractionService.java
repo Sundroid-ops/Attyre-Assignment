@@ -8,5 +8,5 @@ import java.util.List;
 public interface UserInteractionService {
     public void saveInteraction(Long userID, Long productID, Action action);
 
-    public List<Product> getInteraction(Long userID, int page, int size);
+    public List<Product> getProductInteractions(Long userID, int page, int size);
 }

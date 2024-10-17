@@ -11,5 +11,4 @@ public interface UserService {
 
     public User getUserByID(Long ID);
 
-    //public List<Product> getRecommendationsByUserID(Long userID);
 }

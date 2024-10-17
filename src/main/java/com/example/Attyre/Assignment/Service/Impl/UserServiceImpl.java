@@ -1,10 +1,12 @@
 package com.example.Attyre.Assignment.Service.Impl;
 
 import com.example.Attyre.Assignment.DTO.UserDTO;
+import com.example.Attyre.Assignment.Entity.Product;
 import com.example.Attyre.Assignment.Entity.User;
 import com.example.Attyre.Assignment.Exception.InternalServerException;
 import com.example.Attyre.Assignment.Exception.UserNotFoundException;
 import com.example.Attyre.Assignment.Repository.UserRepo;
+import com.example.Attyre.Assignment.Service.ProductService;
 import com.example.Attyre.Assignment.Service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,5 +59,4 @@ public class UserServiceImpl implements UserService {
         logger.info("User Found for ID: {}", user.getId());
         return user;
     }
-
 }

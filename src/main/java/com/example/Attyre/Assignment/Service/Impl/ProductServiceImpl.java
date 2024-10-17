@@ -74,6 +74,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public List<Product> getProductsFromUserPreference(Long userID, int page, int size) {
         List<Product> products = new LinkedList<>();
+        if (size == 0) return products;
 
         Preference userPreference = preferenceService.getPreferenceDataByUserID(userID);
         if(userPreference != null) {
@@ -87,6 +88,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public List<Product> getPopularProducts(int page, int size) {
+        if(size == 0) return new LinkedList<>();
         List<Product> products = popularProductsService.getPopularProducts(0, 5);
 
         if(products == null || products.isEmpty() || products.size() < size){
@@ -117,22 +119,5 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return popularProducts;
-    }
-
-    @Override
-    @Transactional
-    public List<Product> getRecommendationsByUser(Long userID, int page, int size) {
-        List<Product> products = new LinkedList<>();
-
-        List<Product> popularProducts = getPopularProducts(page, 2);
-        size -= popularProducts.size();
-        if(popularProducts != null && !popularProducts.isEmpty())
-            products.addAll(popularProducts);
-
-        List<Product> userPreferProducts = getProductsFromUserPreference(userID, page, size);
-        if(userPreferProducts != null && !userPreferProducts.isEmpty())
-            products.addAll(userPreferProducts);
-
-        return products;
     }
 }
