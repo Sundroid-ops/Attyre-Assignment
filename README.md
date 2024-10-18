@@ -13,7 +13,7 @@
 Setting Up Project ⚙️
 - Git clone the project
     ```bash
-    https://github.com/Sundroid-ops/Attyre-Assignment.git 
+    git clone https://github.com/Sundroid-ops/Attyre-Assignment.git 
     ```
 
 - Create **application.yml** file refer [exampleApplication.yml](src/main/resources/exampleApplication.yml)
